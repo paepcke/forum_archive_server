@@ -11,25 +11,23 @@
   </head>
 
   <body>
-    <ul>
-      <section>
-        <h1>Question</h1>
-        {% raw question %}
-      </section>
-      <section>
-        <h1>Answer</h1>
-        {% raw answer %}
-      </section>
-      <aside>
-        <form  class="line-item-feedback">
-          <fieldset>
-            <legend>Answers my question...</legend>
-            <input type="radio" name="q1" value="Not" style="align:left"> Not at all<br>
-            <input type="radio" name="q1" value="Somewhat" style="align:left"> Partially<br>
-            <input type="radio" name="q1" value="Fully" style="align:left"> Completely<br>
-          </fieldset>
-        </form>
-      </aside>
-    </ul>
+    <section1>
+      <h1>Question</h1>
+      {% raw question %}
+    </section1>
+    <section2>
+      <h1>Answer</h1>
+      {% raw answer %}
+    </section2>
+    <aside>
+      <form  class="line-item-feedback">
+        <fieldset>
+          <legend>Answers my question...</legend>
+          <input type="radio" name="q1" value="Not" style="align:left"> Not at all<br>
+          <input type="radio" name="q1" value="Somewhat" style="align:left"> Partially<br>
+          <input type="radio" name="q1" value="Fully" style="align:left"> Completely<br>
+        </fieldset>
+      </form>
+    </aside>
   </body>
 </html>

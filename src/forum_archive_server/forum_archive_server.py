@@ -154,7 +154,7 @@ class ForumArchiveServer(RequestHandler):
                 self.writeError("Error during MySQL driver close: '%s'" % `e`)
 
     def handleFaqLookup(self, keywords):
-        query = '''SELECT question, answer
+        query = '''SELECT question, answer, question_id
     				 FROM ForumKeywords LEFT JOIN ForumPosts
     				 ON question_id = id
     				 WHERE keyword = '%s'
@@ -171,8 +171,9 @@ class ForumArchiveServer(RequestHandler):
         
         for result in self.mysqlDb.query(query):
             # Format the list of tuples, and send
-            # back to browser:
-            self.writeResult(result)
+            # back to browser. Each result will
+            # be a tuple: (<questionText>,<answerText>,<questionId>)
+            self.writeResult(result, keywords)
 
     def ensureOpenMySQLDb(self):
         try:
@@ -192,17 +193,23 @@ class ForumArchiveServer(RequestHandler):
         return self.mysqlDb
 
 
-    def writeResult(self, resultTuple):
+    def writeResult(self, resultTuple, keywords):
         '''
-        Given a 
+        Result tuples are (<questionText>, answerText, questionID).
+        Keywords is an array of keywords that are were requested from
+        the browser. The questionText/answerText are placed in the
+        Tornado Web template, which is then sent to the browser. 
+        The questionID and keywords are used for logging.
         
-        @param msg:
+        @param resultTuple: Result from query to MySQL
+        @type resultTuple: (string,string,string)
+        @param keywords: The keyword(s) passed from the browser.
+        @type keywords: [string]
         '''
-        self.logDebug("Sending result to browser: %s" % str(resultTuple))
+
+        self.logDebug("Response: %s: %s" % (keywords, resultTuple[2]))
         if not self.testing:
-            #****html_str = ''
             (question, answer) = (resultTuple[0], resultTuple[1])
-            #****html_str += "<li><b>Question:</b> %s</li><li><b>Answer: </b>: %s</li>" % (question, answer)
             self.write(RESULT_TEMPLATE.generate(question=question, answer=answer))
 
     def writeError(self, msg):

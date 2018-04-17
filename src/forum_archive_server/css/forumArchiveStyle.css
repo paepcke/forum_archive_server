@@ -14,19 +14,30 @@ header
 
 aside
 {
-     float: right;
-     width: 30%;
-     background: #e5e5e5;
+    float: right;
+    min-width: 150px;
+    width: 10%;
+    background: #e5e5e5;
 }
 
 
-section
+section1
 {
     padding:5px;
-    border:dashed 3px #0026ff;
     margin-top:5px;
-	width: 65%;
-	float: left;
+  	width: 88%;
+  	float: left;
+    background: #a3e4d7; /* Light green */
+}
+
+section2
+{
+    padding:5px;
+    margin-top:5px;
+    margin-bottom: 15px;
+  	width: 88%;
+  	float: left;
+    background: #76d7c4 /* Slightly darker green */
 }
 
 footer
@@ -35,16 +46,3 @@ footer
     text-align:center;
 }
 
-nav
-{
-    text-align:center;
-}
-ul li
-{
-    display:inline;
-    padding-left:5px;
-    padding-right:5px;
-    text-align:left;
-    font-size:16px;
-    font-weight:bold;
-}
