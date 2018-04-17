@@ -23,12 +23,14 @@ import os
 import socket
 import sys
 import traceback
+import uuid
 
 from pymysql_utils.pymysql_utils import MySQLDB
 from tornado import template
 import tornado;
 from tornado.httpclient import AsyncHTTPClient
 from tornado.web import RequestHandler, asynchronous
+from pip._vendor.requests.sessions import session
 
 
 DEBUG = 1
@@ -80,7 +82,17 @@ class ForumArchiveServer(RequestHandler):
         http_client  = AsyncHTTPClient()
         request_dict = self.request.arguments
         
-        self.serveOneForumRequest(request_dict, http_client)
+        # Is this a request for a keyword lookup,
+        # or feedback from a form in a prior response
+        # page?
+        
+        if request_dict.get('req', None) is not None:
+            self.serveOneForumRequest(request_dict, http_client)
+        elif request_dict.get('feedback', None) is not None:
+            self.logFeedback(request_dict)
+        else:
+            self.logErr("Bad request: %s" % request_dict)
+            
         self.finish()
         http_client.close()    
 
@@ -96,6 +108,9 @@ class ForumArchiveServer(RequestHandler):
         if self.loglevel >= ForumArchiveServer.LOG_LEVEL_DEBUG:
             print(str(datetime.datetime.now()) + ' debug: ' + msg)
 
+    def logFeedback(self, request_dict):
+        self.logDebug("Feedback: %s" % str(request_dict))
+        
     def serveOneForumRequest(self, request_dict, http_client):
 
         if self.testing:
@@ -138,6 +153,8 @@ class ForumArchiveServer(RequestHandler):
                     return
                 self.handleFaqLookup(keywords)
                 return
+            else:
+                self.logDebug("Unknown request: %s" % requestName)
         except Exception as e:
             if self.loglevel == ForumArchiveServer.LOG_LEVEL_NONE:
                 return
@@ -168,32 +185,17 @@ class ForumArchiveServer(RequestHandler):
             for keyword in keywords[1:]:
                 query += " OR keyword = '%s'" % keyword
             query += ';'
-        
+            
+        session_id = str(uuid.uuid4())    
+        rank = 0
         for result in self.mysqlDb.query(query):
             # Format the list of tuples, and send
             # back to browser. Each result will
             # be a tuple: (<questionText>,<answerText>,<questionId>)
-            self.writeResult(result, keywords)
+            rank += 1
+            self.writeResult(result, keywords, rank, session_id)
 
-    def ensureOpenMySQLDb(self):
-        try:
-            home_dir = os.path.expanduser('~')
-            with open(os.path.join(home_dir, '.ssh/mysql'), 'r') as fd:
-                self.mySQLPwd = fd.readline().strip()
-                self.mysqlDb = MySQLDB(user=self.currUser, passwd=self.mySQLPwd, db=self.defaultDb)
-        except Exception:
-            try:
-                # Try w/o a pwd:
-                self.mySQLPwd = None
-                self.mysqlDb = MySQLDB(user=self.currUser, db=self.defaultDb)
-            except Exception as e:
-                # Remember the error msg for later:
-                self.dbError = `e`;
-                self.mysqlDb = None
-        return self.mysqlDb
-
-
-    def writeResult(self, resultTuple, keywords):
+    def writeResult(self, resultTuple, keywords, rank, session_id):
         '''
         Result tuples are (<questionText>, answerText, questionID).
         Keywords is an array of keywords that are were requested from
@@ -205,12 +207,21 @@ class ForumArchiveServer(RequestHandler):
         @type resultTuple: (string,string,string)
         @param keywords: The keyword(s) passed from the browser.
         @type keywords: [string]
+        @param rank: Rank of this result in the session
+        @type rank: int
+        @param session_id: unique id used in log to know the answers
+                 that were given in response to a single request.
+        @type session_id: string
         '''
 
-        self.logDebug("Response: %s: %s" % (keywords, resultTuple[2]))
+        self.logDebug("Response to: %s. QID: %s. Rank: %s. Session: %s" % (keywords, resultTuple[2], rank, session_id))
         if not self.testing:
             (question, answer) = (resultTuple[0], resultTuple[1])
-            self.write(RESULT_TEMPLATE.generate(question=question, answer=answer))
+            self.write(RESULT_TEMPLATE.generate(question=question, 
+                                                answer=answer,
+                                                session_id=session_id,
+                                                rank=rank
+                                                ))
 
     def writeError(self, msg):
         '''
@@ -228,6 +239,22 @@ class ForumArchiveServer(RequestHandler):
             except IOError as e:
                 self.logErr('IOError while writing error to browser; msg attempted to write; "%s" (%s)' % (msg, `e`))
 
+    def ensureOpenMySQLDb(self):
+        try:
+            home_dir = os.path.expanduser('~')
+            with open(os.path.join(home_dir, '.ssh/mysql'), 'r') as fd:
+                self.mySQLPwd = fd.readline().strip()
+                self.mysqlDb = MySQLDB(user=self.currUser, passwd=self.mySQLPwd, db=self.defaultDb)
+        except Exception:
+            try:
+                # Try w/o a pwd:
+                self.mySQLPwd = None
+                self.mysqlDb = MySQLDB(user=self.currUser, db=self.defaultDb)
+            except Exception as e:
+                # Remember the error msg for later:
+                self.dbError = `e`;
+                self.mysqlDb = None
+        return self.mysqlDb
 
 
 def main(argv=None):
@@ -275,7 +302,7 @@ def main(argv=None):
         #******application.listen(8080, ssl_options=sslArgsDict)
         application.listen(8080)
     
-        sys.stdout.write('Starting ForumArchiveServer.')
+        sys.stdout.write('Starting ForumArchiveServer.\n')
         try:
             tornado.ioloop.IOLoop.instance().start()
         except Exception as e:

@@ -17,27 +17,30 @@ aside
     float: right;
     min-width: 150px;
     width: 10%;
-    background: #e5e5e5;
+    color: white;
+    background: #009933;
 }
 
 
-section1
+question-section
 {
     padding:5px;
     margin-top:5px;
   	width: 88%;
   	float: left;
-    background: #a3e4d7; /* Light green */
+    color: white;
+    background: #008080; /* Light green */
 }
 
-section2
+answer-section
 {
     padding:5px;
     margin-top:5px;
     margin-bottom: 15px;
   	width: 88%;
   	float: left;
-    background: #76d7c4 /* Slightly darker green */
+    color: black;
+    background: #90e4e4  /* Slightly darker green */
 }
 
 footer

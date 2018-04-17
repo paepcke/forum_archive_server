@@ -8,26 +8,35 @@
     <meta content='Forum Questions and Answers' name='description' />
     <meta content='width=device-width, initial-scale=1' name='viewport' />
     <link rel="stylesheet" href="/css/forumArchiveStyle.css" />
+
   </head>
 
   <body>
-    <section1>
+    <question-section>
       <h1>Question</h1>
       {% raw question %}
-    </section1>
-    <section2>
+    </question-section>
+    <answer-section>
       <h1>Answer</h1>
       {% raw answer %}
-    </section2>
+    </answer-section>
     <aside>
-      <form  class="line-item-feedback">
+      <form id="feedback" class="line-item-feedback" action="http://taffy:8080/serveFaqs">
         <fieldset>
           <legend>Answers my question...</legend>
-          <input type="radio" name="q1" value="Not" style="align:left"> Not at all<br>
-          <input type="radio" name="q1" value="Somewhat" style="align:left"> Partially<br>
-          <input type="radio" name="q1" value="Fully" style="align:left"> Completely<br>
+          <input type="radio" name="feedback" value="Not,{% raw session_id %},{% raw rank %}" style="align:left"> Not at all<br>
+          <input type="radio" name="feedback" value="Partial,{% raw session_id %},{% raw rank %}" style="align:left"> Partially<br>
+          <input type="radio" name="feedback" value="Completely,{% raw session_id %},{% raw rank %}" style="align:left"> Completely<br>
         </fieldset>
       </form>
     </aside>
+
+    <script type="text/javascript">
+      var feedbackForms = document.getElementsByClassName('line-item-feedback')
+      for (var i=0; i<feedbackForms.length; i++) {
+          feedbackForms[i].onclick = feedbackForms[i].submit;
+      }
+    </script>    
+
   </body>
 </html>
