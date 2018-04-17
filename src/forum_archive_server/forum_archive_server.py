@@ -200,10 +200,10 @@ class ForumArchiveServer(RequestHandler):
         '''
         self.logDebug("Sending result to browser: %s" % str(resultTuple))
         if not self.testing:
-            html_str = ''
+            #****html_str = ''
             (question, answer) = (resultTuple[0], resultTuple[1])
-            html_str += "<li><b>Question:</b> %s</li><li><b>Answer: </b>: %s</li>" % (question, answer)
-            self.write(RESULT_TEMPLATE.generate(result=html_str))
+            #****html_str += "<li><b>Question:</b> %s</li><li><b>Answer: </b>: %s</li>" % (question, answer)
+            self.write(RESULT_TEMPLATE.generate(question=question, answer=answer))
 
     def writeError(self, msg):
         '''
@@ -231,8 +231,9 @@ def main(argv=None):
     try:
 
         # MAIN BODY #
-        application = tornado.web.Application([(r"/serveFaqs", ForumArchiveServer),])
-        #application.listen(8080)
+        application = tornado.web.Application([(r"/serveFaqs", ForumArchiveServer),
+                                               (r"/css/(.*)", tornado.web.StaticFileHandler, {"path": "./css"},),
+                                               ])
     
         # To find the SSL certificate location, we assume
         # that it is stored in dir '.ssl' in the current

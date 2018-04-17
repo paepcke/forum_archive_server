@@ -1,10 +1,35 @@
+<!DOCTYPE html>
+
 <html>
   <head>
-    <title>Forum Archive Results</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>From the Forum Archives</title>
+    <meta content='Forum Questions and Answers' name='description' />
+    <meta content='width=device-width, initial-scale=1' name='viewport' />
+    <link rel="stylesheet" href="/css/forumArchiveStyle.css" />
   </head>
+
   <body>
     <ul>
-      {% raw result %}
+      <section>
+        <h1>Question</h1>
+        {% raw question %}
+      </section>
+      <section>
+        <h1>Answer</h1>
+        {% raw answer %}
+      </section>
+      <aside>
+        <form  class="line-item-feedback">
+          <fieldset>
+            <legend>Answers my question...</legend>
+            <input type="radio" name="q1" value="Not" style="align:left"> Not at all<br>
+            <input type="radio" name="q1" value="Somewhat" style="align:left"> Partially<br>
+            <input type="radio" name="q1" value="Fully" style="align:left"> Completely<br>
+          </fieldset>
+        </form>
+      </aside>
     </ul>
   </body>
 </html>

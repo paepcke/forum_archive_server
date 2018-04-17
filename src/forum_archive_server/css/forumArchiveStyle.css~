@@ -1,0 +1,50 @@
+/* CSS for Forum Archive Question/Answer Delivery*/
+article
+{
+    padding:5px;
+    border:dotted 3px #ff006e;
+    margin-top:5px;
+}
+
+header
+{
+    padding: 0px;
+    text-align: left;
+}
+
+aside
+{
+     float: right;
+     width: 30%;
+     background: #e5e5e5;
+}
+
+
+section
+{
+    padding:5px;
+    /*border:dashed 3px #0026ff;*/
+    margin-top:5px;
+	width: 65%;
+	float: left;
+}
+
+footer
+{
+    padding:5px;
+    text-align:center;
+}
+
+nav
+{
+    text-align:center;
+}
+ul li
+{
+    display:inline;
+    padding-left:5px;
+    padding-right:5px;
+    text-align:left;
+    font-size:16px;
+    font-weight:bold;
+}
