@@ -1,3 +1,6 @@
+# NOTE: need mysql_config:
+#    Ubuntu: sudo apt-get install libmysqlclient-dev
+
 import multiprocessing
 from setuptools import setup, find_packages
 setup(

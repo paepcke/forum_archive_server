@@ -154,10 +154,13 @@ class ForumArchiveServer(RequestHandler):
                 self.writeError("Error during MySQL driver close: '%s'" % `e`)
 
     def handleFaqLookup(self, keywords):
-        query = '''SELECT question,answer
-                   FROM ForumKeywords JOIN ForumPosts
-                     USING(question_id)
-                     WHERE keyword = '%s'
+        query = '''SELECT question, answer
+    				 FROM ForumKeywords LEFT JOIN ForumPosts
+    				 ON question_id = id
+    				 WHERE keyword = '%s'
+    				 ORDER BY answer_type DESC,
+    				          unique_views DESC,
+    				          total_no_upvotes DESC;
                      ''' % keywords[0]
         if len(keywords) == 1:
             query += ';'
@@ -197,7 +200,6 @@ class ForumArchiveServer(RequestHandler):
         '''
         self.logDebug("Sending result to browser: %s" % str(resultTuple))
         if not self.testing:
-            #*****self.write(str(resultTuples))
             html_str = ''
             (question, answer) = (resultTuple[0], resultTuple[1])
             html_str += "<li><b>Question:</b> %s</li><li><b>Answer: </b>: %s</li>" % (question, answer)
