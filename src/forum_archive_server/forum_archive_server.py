@@ -30,8 +30,6 @@ from tornado import template
 import tornado;
 from tornado.httpclient import AsyncHTTPClient
 from tornado.web import RequestHandler, asynchronous
-from pip._vendor.requests.sessions import session
-
 
 DEBUG = 1
 
@@ -45,6 +43,42 @@ class ForumArchiveServer(RequestHandler):
     LOG_LEVEL_DEBUG = 3
 
     LEGAL_REQUESTS = ['getFaqs']
+    
+    RESULT_WEB_PAGE_HEADER = '''
+        <!DOCTYPE html>
+    				  <html>            
+    				    <head>
+    				      <meta charset="utf-8">
+    				      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    				      <title>From the Forum Archives</title>
+    				      <meta content='Forum Questions and Answers' name='description' />
+    				      <meta content='width=device-width, initial-scale=1' name='viewport' />
+    				      <link rel="stylesheet" href="/css/forumArchiveStyle.css" />
+    				    </head>
+    				    <body>
+		'''
+    RESULT_WEB_PAGE_JS_AND_FOOTER = ''' 
+        <script type="text/javascript">
+          var feedbackForms = document.getElementsByClassName('line-item-feedback')
+          for (var i=0; i<feedbackForms.length; i++) {
+              // feedbackForms[i].onclick = feedbackForms[i].submit;
+              feedbackForms[i].onclick = function(event) {
+                  var host     = window.location.hostname;  // myserver.myuniversity.edu
+                  var port     = window.location.port;      // 8080
+                  var protocol = window.location.protocol;  // http:
+                  var pathname = window.location.pathname;  // /serveFaqs
+                  var params   = "?feedback=''&value=" + event.target.value;
+                                           
+                  // alert(protocol + '//' + host + ':' + port + pathname + params);
+                  if (typeof event.target.value != 'undefined') {
+                     fetch(protocol + '//' + host + ':' + port + pathname + params)
+                  }
+              }
+          }
+        </script>
+        </body>
+        </html>
+        '''
 
     def __init__(self, tornadoWebAppObj, httpServerRequest):
         '''
@@ -109,7 +143,7 @@ class ForumArchiveServer(RequestHandler):
             print(str(datetime.datetime.now()) + ' debug: ' + msg)
 
     def logFeedback(self, request_dict):
-        self.logDebug("Feedback: %s" % str(request_dict))
+        self.logDebug("Feedback: %s" % str(request_dict['value']))
         
     def serveOneForumRequest(self, request_dict, http_client):
 
@@ -177,7 +211,7 @@ class ForumArchiveServer(RequestHandler):
     				 WHERE keyword = '%s'
     				 ORDER BY answer_type DESC,
     				          unique_views DESC,
-    				          total_no_upvotes DESC;
+    				          total_no_upvotes DESC
                      ''' % keywords[0]
         if len(keywords) == 1:
             query += ';'
@@ -188,14 +222,29 @@ class ForumArchiveServer(RequestHandler):
             
         session_id = str(uuid.uuid4())    
         rank = 0
-        for result in self.mysqlDb.query(query):
+        results = self.mysqlDb.query(query)
+
+        web_page = self.startResultWebPage()
+        for result in results:
             # Format the list of tuples, and send
             # back to browser. Each result will
             # be a tuple: (<questionText>,<answerText>,<questionId>)
             rank += 1
-            self.writeResult(result, keywords, rank, session_id)
+            web_page = self.addWebResult(web_page, result, keywords, rank, session_id)
+        self.writeResult(web_page)
 
-    def writeResult(self, resultTuple, keywords, rank, session_id):
+    def startResultWebPage(self):
+        '''
+        Starts return Web page for a forum archive request.
+        Doctype, head contents, and body open tag.
+        
+        @return: Web page fragment
+        @rtype: str
+        '''
+        self.response_records = []
+        return ForumArchiveServer.RESULT_WEB_PAGE_HEADER
+        
+    def addWebResult(self, web_page, resultTuple, keywords, rank, session_id):
         '''
         Result tuples are (<questionText>, answerText, questionID).
         Keywords is an array of keywords that are were requested from
@@ -203,6 +252,11 @@ class ForumArchiveServer(RequestHandler):
         Tornado Web template, which is then sent to the browser. 
         The questionID and keywords are used for logging.
         
+        Adds the keyword, qid, rank, and session_id to the accumulating
+        log string. Does not write it out. That's done in writeResult()
+        
+        @param web_page: Web page constructed so far
+        @type web_page: str
         @param resultTuple: Result from query to MySQL
         @type resultTuple: (string,string,string)
         @param keywords: The keyword(s) passed from the browser.
@@ -212,17 +266,50 @@ class ForumArchiveServer(RequestHandler):
         @param session_id: unique id used in log to know the answers
                  that were given in response to a single request.
         @type session_id: string
+        @return: web page fragment with HTML for one question/answer result added
+        @rtype: str 
         '''
 
-        self.logDebug("Response to: %s. QID: %s. Rank: %s. Session: %s" % (keywords, resultTuple[2], rank, session_id))
+        # Turn the keywords array and rank integer into strings
+        # to make final log string construction easier
+        # in writeResult():
+        self.response_records.append([str(keywords), resultTuple[2], session_id, str(rank)])
+        
         if not self.testing:
             (question, answer) = (resultTuple[0], resultTuple[1])
-            self.write(RESULT_TEMPLATE.generate(question=question, 
-                                                answer=answer,
-                                                session_id=session_id,
-                                                rank=rank
-                                                ))
+            web_page += RESULT_TEMPLATE.generate(question=question, 
+                                                 answer=answer,
+                                                 session_id=session_id,
+                                                 rank=rank
+                                                )
+            return web_page
+        
+    def writeResult(self, web_page):
+        '''
+        Given a web page fragment with head, and all HTML for
+        each keyword-matching result, add Javascript and closing
+        body/html tags. Write the result back to the browser.
+        
+        Also: writes all the responses too the log: keyword, qid, 
+        rank, and session_id. 
+        
+        @param web_page: web page fragment
+        @type web_page: str
+        '''
+        # The self.response_records is an array of arrays:
+        #
+        #   a = []
+        #   a.append(['foo','bar','fum'])
+        #   a.append(['blue','green','yellow'])
+        # ==> [['foo', 'bar', 'fum'], ['blue', 'green', 'yellow']]
+        #
+        # Turn that into: 'foo,bar,fum\n   blue,green,yellow'
 
+        response_log_str = '\n   ' + '\n   '.join([','.join(one_record) for one_record in self.response_records])
+        self.logInfo(response_log_str)
+        web_page += ForumArchiveServer.RESULT_WEB_PAGE_JS_AND_FOOTER
+        self.write(web_page)
+        
     def writeError(self, msg):
         '''
         Writes a response to the JS running in the browser
