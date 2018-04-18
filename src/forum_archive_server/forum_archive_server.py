@@ -24,6 +24,7 @@ import socket
 import sys
 import traceback
 import uuid
+import urllib
 
 from pymysql_utils.pymysql_utils import MySQLDB
 from tornado import template
@@ -80,6 +81,16 @@ class ForumArchiveServer(RequestHandler):
         </html>
         '''
 
+    ERR_HTML_PAGE = '''
+        <html>
+        <page>
+        Sadly, an error occurred: %s.<br>
+        please <a href="mailto:ankitab@stanford.edu?cc=paepcke@cs.stanford.edu&subject=Forum+Server+Error&body=%s">
+           paste into a message to Ankita</a>
+        </page>
+        </html>
+        '''
+
     def __init__(self, tornadoWebAppObj, httpServerRequest):
         '''
         Invoked every time a request arrives.
@@ -132,15 +143,18 @@ class ForumArchiveServer(RequestHandler):
 
     def logInfo(self, msg):
         if self.loglevel >= ForumArchiveServer.LOG_LEVEL_INFO:
-            print(str(datetime.datetime.now()) + ' info: ' + msg)
+            sys.stdout.write(str(datetime.datetime.now()) + ' info: ' + msg + '\n')
+            sys.stdout.flush()
 
     def logErr(self, msg):
         if self.loglevel >= ForumArchiveServer.LOG_LEVEL_ERR:
-            print(str(datetime.datetime.now()) + ' error: ' + msg)
+            sys.stderr.write(str(datetime.datetime.now()) + ' error: ' + msg)
+            sys.stderr.flush()
 
     def logDebug(self, msg):
         if self.loglevel >= ForumArchiveServer.LOG_LEVEL_DEBUG:
-            print(str(datetime.datetime.now()) + ' debug: ' + msg)
+            sys.stdout.write(str(datetime.datetime.now()) + ' debug: ' + msg)
+            sys.stdout.flush()
 
     def logFeedback(self, request_dict):
         # The [0] pulls the info in 
@@ -325,7 +339,8 @@ class ForumArchiveServer(RequestHandler):
         self.logDebug("Sending err to browser: %s" % msg)
         if not self.testing:
             try:
-                self.write(msg)
+                self.write(ForumArchiveServer.ERR_HTML_PAGE % (msg, urllib.quote(msg)))
+                # self.write(msg)
             except IOError as e:
                 self.logErr('IOError while writing error to browser; msg attempted to write; "%s" (%s)' % (msg, `e`))
 
