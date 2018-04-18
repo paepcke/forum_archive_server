@@ -42,7 +42,7 @@ class ForumArchiveServer(RequestHandler):
     LOG_LEVEL_INFO  = 2
     LOG_LEVEL_DEBUG = 3
 
-    LEGAL_REQUESTS = ['getFaqs']
+    LEGAL_REQUESTS = ['getFaqs', 'demo']
     
     RESULT_WEB_PAGE_HEADER = '''
         <!DOCTYPE html>
@@ -143,7 +143,11 @@ class ForumArchiveServer(RequestHandler):
             print(str(datetime.datetime.now()) + ' debug: ' + msg)
 
     def logFeedback(self, request_dict):
-        self.logDebug("Feedback: %s" % str(request_dict['value']))
+        # The [0] pulls the info in 
+        #   Feedback: ['Partial,040c8977-e040-4b87-bcc0-b899cdcd093c,1']
+        # out of the parens to make the log simple:
+        
+        self.logInfo("Feedback: %s" % str(request_dict['value'][0]))
         
     def serveOneForumRequest(self, request_dict, http_client):
 
@@ -174,7 +178,7 @@ class ForumArchiveServer(RequestHandler):
                 return   
             
             # Caller wants list of course names?
-            if requestName == 'getFaqs':
+            if requestName in ['getFaqs', 'demo']:
                 # For FAQ entry requests, args is a list of 
                 # keywords:
                 try:
@@ -185,7 +189,7 @@ class ForumArchiveServer(RequestHandler):
                 if len(keywords) == 0:
                     self.writeError("Requested getFaqs without providing keywords.")
                     return
-                self.handleFaqLookup(keywords)
+                self.handleFaqLookup(keywords, requestName == 'demo')
                 return
             else:
                 self.logDebug("Unknown request: %s" % requestName)
@@ -204,23 +208,22 @@ class ForumArchiveServer(RequestHandler):
             except Exception as e:
                 self.writeError("Error during MySQL driver close: '%s'" % `e`)
 
-    def handleFaqLookup(self, keywords):
+    def handleFaqLookup(self, keywords, isDemo):
         query = '''SELECT question, answer, question_id
     				 FROM ForumKeywords LEFT JOIN ForumPosts
     				 ON question_id = id
     				 WHERE keyword = '%s'
-    				 ORDER BY answer_type DESC,
-    				          unique_views DESC,
-    				          total_no_upvotes DESC
                      ''' % keywords[0]
-        if len(keywords) == 1:
-            query += ';'
-        else: 
+        if len(keywords) > 1:
             for keyword in keywords[1:]:
                 query += " OR keyword = '%s'" % keyword
-            query += ';'
             
-        session_id = str(uuid.uuid4())    
+        query += ''' 
+                     ORDER BY answer_type DESC,
+    				          unique_views DESC,
+    				          total_no_upvotes DESC;
+    			'''
+        session_id = 'demo' if isDemo else str(uuid.uuid4())    
         rank = 0
         results = self.mysqlDb.query(query)
 
