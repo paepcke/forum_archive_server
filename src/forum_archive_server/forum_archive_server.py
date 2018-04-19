@@ -84,9 +84,9 @@ class ForumArchiveServer(RequestHandler):
     ERR_HTML_PAGE = '''
         <html>
         <page>
-        Sadly, an error occurred: %s.<br>
+        Sadly, an error occurred at the server.<br>
         please <a href="mailto:ankitab@stanford.edu?cc=paepcke@cs.stanford.edu&subject=Forum+Server+Error&body=%s">
-           paste into a message to Ankita</a>
+           click this link to send email to Ankita</a>for debugging. Thanks!
         </page>
         </html>
         '''
@@ -136,7 +136,9 @@ class ForumArchiveServer(RequestHandler):
         elif request_dict.get('feedback', None) is not None:
             self.logFeedback(request_dict)
         else:
-            self.logErr("Bad request: %s" % request_dict)
+            msg = "Bad request: %s" % request_dict
+            self.logErr(msg)
+            self.writeError(msg)
             
         self.finish()
         http_client.close()    
@@ -148,12 +150,12 @@ class ForumArchiveServer(RequestHandler):
 
     def logErr(self, msg):
         if self.loglevel >= ForumArchiveServer.LOG_LEVEL_ERR:
-            sys.stderr.write(str(datetime.datetime.now()) + ' error: ' + msg)
+            sys.stderr.write(str(datetime.datetime.now()) + ' error: ' + msg + '\n')
             sys.stderr.flush()
 
     def logDebug(self, msg):
         if self.loglevel >= ForumArchiveServer.LOG_LEVEL_DEBUG:
-            sys.stdout.write(str(datetime.datetime.now()) + ' debug: ' + msg)
+            sys.stdout.write(str(datetime.datetime.now()) + ' debug: ' + msg + '\n')
             sys.stdout.flush()
 
     def logFeedback(self, request_dict):
@@ -339,7 +341,8 @@ class ForumArchiveServer(RequestHandler):
         self.logDebug("Sending err to browser: %s" % msg)
         if not self.testing:
             try:
-                self.write(ForumArchiveServer.ERR_HTML_PAGE % (msg, urllib.quote(msg)))
+                self.write(ForumArchiveServer.ERR_HTML_PAGE % (urllib.quote(msg)) + '\n')
+                self.flush()
                 # self.write(msg)
             except IOError as e:
                 self.logErr('IOError while writing error to browser; msg attempted to write; "%s" (%s)' % (msg, `e`))

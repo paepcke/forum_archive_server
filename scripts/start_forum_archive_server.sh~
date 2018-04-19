@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+# Need to be in the proper Anaconda environment,
+# otherwise Python load paths won't be properly set:
+logInfo "Activating Anaconda data_intake environment..."
+cd $CURR_SCRIPTS_DIR
+source /app/local_programs/anaconda/bin/activate data_intake
+logInfo "Done activating Anaconda data_intake environment..."
