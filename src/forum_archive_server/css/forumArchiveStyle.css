@@ -4,6 +4,7 @@ body
 {
     background: #808080;
 }
+
 article
 {
     padding:5px;
@@ -24,6 +25,7 @@ aside
     width: 10%;
     color: white;
     background: #009933;
+    padding: 3px;
 }
 
 

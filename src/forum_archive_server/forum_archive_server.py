@@ -24,6 +24,7 @@ import socket
 import sys
 import traceback
 import uuid
+import urllib
 
 from pymysql_utils.pymysql_utils import MySQLDB
 from tornado import template
@@ -80,6 +81,16 @@ class ForumArchiveServer(RequestHandler):
         </html>
         '''
 
+    ERR_HTML_PAGE = '''
+        <html>
+        <page>
+        Sadly, an error occurred at the server.<br>
+        please <a href="mailto:ankitab@stanford.edu?cc=paepcke@cs.stanford.edu&subject=Forum+Server+Error&body=%s">
+           click this link to send email to Ankita</a>for debugging. Thanks!
+        </page>
+        </html>
+        '''
+
     def __init__(self, tornadoWebAppObj, httpServerRequest):
         '''
         Invoked every time a request arrives.
@@ -125,22 +136,27 @@ class ForumArchiveServer(RequestHandler):
         elif request_dict.get('feedback', None) is not None:
             self.logFeedback(request_dict)
         else:
-            self.logErr("Bad request: %s" % request_dict)
+            msg = "Bad request: %s" % request_dict
+            self.logErr(msg)
+            self.writeError(msg)
             
         self.finish()
         http_client.close()    
 
     def logInfo(self, msg):
         if self.loglevel >= ForumArchiveServer.LOG_LEVEL_INFO:
-            print(str(datetime.datetime.now()) + ' info: ' + msg)
+            sys.stdout.write(str(datetime.datetime.now()) + ' info: ' + msg + '\n')
+            sys.stdout.flush()
 
     def logErr(self, msg):
         if self.loglevel >= ForumArchiveServer.LOG_LEVEL_ERR:
-            print(str(datetime.datetime.now()) + ' error: ' + msg)
+            sys.stderr.write(str(datetime.datetime.now()) + ' error: ' + msg + '\n')
+            sys.stderr.flush()
 
     def logDebug(self, msg):
         if self.loglevel >= ForumArchiveServer.LOG_LEVEL_DEBUG:
-            print(str(datetime.datetime.now()) + ' debug: ' + msg)
+            sys.stdout.write(str(datetime.datetime.now()) + ' debug: ' + msg + '\n')
+            sys.stdout.flush()
 
     def logFeedback(self, request_dict):
         # The [0] pulls the info in 
@@ -325,7 +341,9 @@ class ForumArchiveServer(RequestHandler):
         self.logDebug("Sending err to browser: %s" % msg)
         if not self.testing:
             try:
-                self.write(msg)
+                self.write(ForumArchiveServer.ERR_HTML_PAGE % (urllib.quote(msg)) + '\n')
+                self.flush()
+                # self.write(msg)
             except IOError as e:
                 self.logErr('IOError while writing error to browser; msg attempted to write; "%s" (%s)' % (msg, `e`))
 
