@@ -1,4 +1,9 @@
 /* CSS for Forum Archive Question/Answer Delivery*/
+
+body
+{
+    background: #808080;
+}
 article
 {
     padding:5px;

@@ -1,0 +1,45 @@
+/* CSS for page with the grid of wordclouds */
+
+body {
+    margin: 40px;
+}
+
+.wrapper {
+    display: grid;
+    /* width: 100vw;
+      height: 100vw; */
+    grid-template-columns: 25% 25% 25% 25%;
+    grid-gap: 10px;
+    background-color: #fff;
+    color: #444;
+}
+
+.box {
+    background-color: #444;
+    color: #fff;
+    border-radius: 5px;
+    padding: 20px;
+    font-size: 150%;
+
+    height: 25vh;
+}
+
+.cloudIcon {
+    margin: auto;
+    max-width: 80%;
+    display: block;
+}
+
+.cloudIcon:hover {
+    -webkit-transform: scale(3.0);
+    -moz-transform: scale(3.0);
+    -o-transform: scale(3.0);
+    transform: scale(3.0);
+    transition: all 0.3s;
+    -webkit-transition: all 0.3s;
+}
+
+.caption {
+    text-align: center;
+    padding-top: 4px;
+}
