@@ -261,7 +261,7 @@ class ForumArchiveServer(RequestHandler):
         @rtype: str
         '''
         self.response_records = []
-        return ForumArchiveServer.RESULT_WEB_PAGE_HEADER
+        return ForumArchiveServer.RESULT_WEB_PAGE_HEADER + "<div>Foobar</div>\n"
         
     def addWebResult(self, web_page, resultTuple, keywords, rank, session_id):
         '''
