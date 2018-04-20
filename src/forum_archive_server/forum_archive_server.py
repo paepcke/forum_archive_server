@@ -364,6 +364,11 @@ class ForumArchiveServer(RequestHandler):
                 self.mysqlDb = None
         return self.mysqlDb
 
+#**********
+# class LandingPageServer(tornado.web.RequestHandler):
+#     def get(self):
+#         self.w
+#**********
 
 def main(argv=None):
     '''Command line options.'''
@@ -375,6 +380,8 @@ def main(argv=None):
         # MAIN BODY #
         application = tornado.web.Application([(r"/serveFaqs", ForumArchiveServer),
                                                (r"/css/(.*)", tornado.web.StaticFileHandler, {"path": "./css"},),
+                                               (r"/wordclouds/(.*)", tornado.web.StaticFileHandler, {"path": "./wordclouds"},),
+                                               (r"/(index\.html)", tornado.web.StaticFileHandler, {"path": "./"},),
                                                ])
     
         # To find the SSL certificate location, we assume
