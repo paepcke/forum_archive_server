@@ -264,11 +264,12 @@ class ForumArchiveServer(RequestHandler):
         '''
         self.response_records = []
         header = ForumArchiveServer.RESULT_WEB_PAGE_HEADER +\
-               '<div class="title">Keyword(s): %s</div>\n' % ','.join(keywords) +\
-               '<div class="feedback_email">' +\
-                  '<a href="mailto:ankitab@stanford.edu?subject=Forum%20Archive%20Feedback&cc=paepcke@cs.stanford.edu">' +\
-                  'Feedback to Ankita' +\
-                  '</a></div>\n'
+            '<div class="title">Keyword(s): %s' % ','.join(keywords) +\
+            '  <div class="feedback_email">' +\
+            '    <a href="mailto:ankitab@stanford.edu?subject=Forum%20Archive%20Feedback&cc=paepcke@cs.stanford.edu">' +\
+            '       Feedback to Ankita' +\
+            '    </a></div>\n' +\
+            '</div>\n'
         return header
         
     def addWebResult(self, web_page, resultTuple, keywords, rank, session_id):

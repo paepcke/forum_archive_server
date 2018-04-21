@@ -14,10 +14,20 @@ body
 .feedback_email {
     float: right;
     color: white;
-    font-size: 110%;
+    font-size: 50%;
+    padding: 5px;
     text-align: center;
-    background: #009933;    
+    background: #752020;
+    border-radius: 10px;
+    margin-right: 40px;
+    margin-top: 4px;
 }
+
+.feedback_email a {
+    color: white;
+    font-style: italic;
+}
+
 
 article
 {
@@ -53,7 +63,7 @@ p.question-answer-text
     padding-bottom: 20px;
     width: 90%;
     margin: auto;
-    width: 90%;
+    font-size: 90%;
 }
 
 question-section
