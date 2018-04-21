@@ -35,8 +35,16 @@ find wordclouds -name index.html | while read EXISTING_INDEX_FILE; do
         cp ${EXISTING_INDEX_FILE} ${SAVED_FILE_NAME}
     fi
 
-    # Make the target attriute correction:
-    cat ${SAVED_FILE_NAME} | sed 's/target="wordcloud"/target="_self"/p' > ${EXISTING_INDEX_FILE}
+    # Make the wordcloud file corrections:
+    #   sed #1: add import of javascript ../../js/wordclouds.js in <head>
+    #   sed #2: add onclick="cloudClick(this)" to each <area> entry
+    #   sed #3: change target in each <area> from "wordcloud" to "_self"
+    #       so that result pages open in same browser tab as wordcloud:
+
+    cat ${SAVED_FILE_NAME} | \
+         sed 's|</head>|<script type="text/javascript" src="../../js/wordclouds.js"></script></head>|' | \
+         sed 's/<area /<area onclick="cloudClick(this)" /p' |\
+         sed 's/target="wordcloud"/target="_self"/p' > ${EXISTING_INDEX_FILE}
 done
 echo "Done."
 
