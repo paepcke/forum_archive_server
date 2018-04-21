@@ -1,20 +1,12 @@
 #!/usr/bin/env python
 # encoding: utf-8
 '''
-forum_archive_server.forum_archive_server -- shortdesc
+Server to return forum question/answer pairs from
+either search or wordclouds. Uses Tornado to manage
+incoming connections. 
 
-forum_archive_server.forum_archive_server is a description
+@author:     Andreas Paepcke
 
-It defines classes_and_methods
-
-@author:     user_name
-
-@copyright:  2018 organization_name. All rights reserved.
-
-@license:    license
-
-@contact:    user_email
-@deffield    updated: Updated
 '''
 
 import datetime
@@ -38,6 +30,7 @@ RESULT_TEMPLATE = template.Loader(os.path.dirname(__file__)).load("responseTempl
 
 class ForumArchiveServer(RequestHandler):
 
+    # =========================== Constants ==================
     LOG_LEVEL_NONE  = 0
     LOG_LEVEL_ERR   = 1
     LOG_LEVEL_INFO  = 2
@@ -91,6 +84,11 @@ class ForumArchiveServer(RequestHandler):
         </html>
         '''
 
+    # =============================== Methods ========================
+    
+    #-----------------------
+    # Constructor
+    #---------------
     def __init__(self, tornadoWebAppObj, httpServerRequest):
         '''
         Invoked every time a request arrives.
@@ -121,9 +119,19 @@ class ForumArchiveServer(RequestHandler):
         #self.loglevel = CourseCSVServer.LOG_LEVEL_NONE
         
         self.testing = False
+    
+    #-----------------------
+    # get() 
+    #---------------
         
     @asynchronous
     def get(self):
+        '''
+        Called by Tornado when HTTP GET request
+        arrives. Arguments part of URL is in 
+        self.request.arguments.
+
+        '''
         http_client  = AsyncHTTPClient()
         request_dict = self.request.arguments
         
@@ -143,30 +151,67 @@ class ForumArchiveServer(RequestHandler):
         self.finish()
         http_client.close()    
 
+    #-----------------------
+    # logInfo() 
+    #---------------
+
     def logInfo(self, msg):
         if self.loglevel >= ForumArchiveServer.LOG_LEVEL_INFO:
             sys.stdout.write(str(datetime.datetime.now()) + ' info: ' + msg + '\n')
             sys.stdout.flush()
+
+    #-----------------------
+    # logErr() 
+    #---------------
 
     def logErr(self, msg):
         if self.loglevel >= ForumArchiveServer.LOG_LEVEL_ERR:
             sys.stderr.write(str(datetime.datetime.now()) + ' error: ' + msg + '\n')
             sys.stderr.flush()
 
+    #-----------------------
+    # logDebug() 
+    #---------------
+
     def logDebug(self, msg):
         if self.loglevel >= ForumArchiveServer.LOG_LEVEL_DEBUG:
             sys.stdout.write(str(datetime.datetime.now()) + ' debug: ' + msg + '\n')
             sys.stdout.flush()
 
+    #-----------------------
+    # logFeedback() 
+    #---------------
+
     def logFeedback(self, request_dict):
+        '''
+        Given args part of incoming URL, from 
+        student clicking one of the feedback survey
+        radio buttons: logs the user's UID, the clicked 
+        radio button's name (Not/Partial/Complete), session ID,
+        and answer rank whose survey was clicked. Rank 
+        is same as number of entry in viewing order.  
+        
+        @param request_dict: URL argument part
+        @type request_dict: dict
+        '''
         # The [0] pulls the info in 
-        #   Feedback: ['Partial,040c8977-e040-4b87-bcc0-b899cdcd093c,1']
+        #   ['Partial,040c8977-e040-4b87-bcc0-b899cdcd093c,1']
         # out of the parens to make the log simple:
         
         self.logInfo("Feedback: %s" % str(request_dict['value'][0]))
         
     def serveOneForumRequest(self, request_dict, http_client):
+        '''
+        Responsible for asychnonously serving the HTTP request
+        on one connection. THe connection remains open.
+        
+        @param request_dict: args part of URL
+        @type request_dict: dict
+        @param http_client: Tornado http client object
+        @type http_client: AsyncHTTPClient
+        '''
 
+        # Unittests not implemented:
         if self.testing:
             self.currUser  = 'unittest'
             self.defaultDb = 'unittest'
@@ -357,6 +402,9 @@ class ForumArchiveServer(RequestHandler):
                 self.logErr('IOError while writing error to browser; msg attempted to write; "%s" (%s)' % (msg, `e`))
 
     def ensureOpenMySQLDb(self):
+        '''
+        Finds MySQL password in ~/.ssh, and opens the MySQL db.
+        '''
         try:
             home_dir = os.path.expanduser('~')
             with open(os.path.join(home_dir, '.ssh/mysql'), 'r') as fd:
@@ -378,6 +426,8 @@ class ForumArchiveServer(RequestHandler):
 #     def get(self):
 #         self.w
 #**********
+
+# ====================================  Main ================
 
 def main(argv=None):
     '''Command line options.'''
@@ -408,6 +458,8 @@ def main(argv=None):
         homeDir = os.path.expanduser("~")
         thisFQDN = socket.getfqdn()
     
+        ## The ugly commented code below is for SSL operation if ever neccesary.
+        
         sslRoot = '%s/.ssl/%s' % (homeDir, thisFQDN)
         #*********
         # For self signed certificate:
