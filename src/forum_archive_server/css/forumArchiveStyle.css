@@ -36,21 +36,36 @@ aside
 {
     float: right;
     min-width: 150px;
-    width: 10%;
+    width: 7%;
     color: white;
-    background: #009933;
-    padding: 3px;
+    background: #752020;    
+    padding: 10px;
+    border-radius: 20px;
 }
 
+
+h1 {
+    margin-left: 30px;
+}
+
+p.question-answer-text
+{
+    padding-bottom: 20px;
+    width: 90%;
+    margin: auto;
+    width: 90%;
+}
 
 question-section
 {
     padding:5px;
-    margin-top:5px;
+    margin-top: 5px;
   	width: 88%;
   	float: left;
     color: white;
-    background: #008080; /* Light green */
+    /* background: #008080; */ /* Light green */
+    background: #514c4c;
+    border-radius: 20px;
 }
 
 answer-section
@@ -61,7 +76,9 @@ answer-section
   	width: 88%;
   	float: left;
     color: black;
-    background: #90e4e4  /* Slightly darker green */
+    /* background: #90e4e4 */ /* Slightly darker green */
+    background: #ebdbdb;
+    border-radius: 20px;    
 }
 
 footer

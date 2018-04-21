@@ -51,7 +51,7 @@ class ForumArchiveServer(RequestHandler):
     				    <head>
     				      <meta charset="utf-8">
     				      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    				      
+    				      <title>From the Forum Archives</title>
     				      <meta content='Forum Questions and Answers' name='description' />
     				      <meta content='width=device-width, initial-scale=1' name='viewport' />
     				      <link rel="stylesheet" href="/css/forumArchiveStyle.css" />
