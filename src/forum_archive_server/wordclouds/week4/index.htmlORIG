@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- This Word Cloud was created at https://WordClouds.com -->
+<title>Week 4</title>
+</head>
+<body style="margin:0; background-color: #808080">
+<img alt="Word Cloud" src="wordcloud.jpg" usemap="#wordCloudMap">
+<map name="wordCloudMap">
+<area shape="rect" alt="92" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=minute" coords="524,36,616,64" target="wordcloud">
+<area shape="rect" alt="96" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=matrix" coords="324,64,420,92" target="wordcloud">
+<area shape="rect" alt="92" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=neural" coords="724,584,816,612" target="wordcloud">
+<area shape="rect" alt="88" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=sanity" coords="152,516,240,552" target="wordcloud">
+<area shape="rect" alt="88" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=future" coords="216,196,304,224" target="wordcloud">
+<area shape="rect" alt="96" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=option" coords="460,716,556,752" target="wordcloud">
+<area shape="rect" alt="100" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=import" coords="428,32,528,72" target="wordcloud">
+<area shape="rect" alt="52" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=python3" coords="808,212,860,332" target="wordcloud">
+<area shape="rect" alt="108" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=jupyter" coords="304,668,412,704" target="wordcloud">
+<area shape="rect" alt="96" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=credits" coords="240,124,336,152" target="wordcloud">
+<area shape="rect" alt="112" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=val_acc" coords="380,688,492,724" target="wordcloud">
+<area shape="rect" alt="104" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=respect" coords="492,692,596,724" target="wordcloud">
+<area shape="rect" alt="100" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=shifted" coords="740,536,840,564" target="wordcloud">
+<area shape="rect" alt="44" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=replace" coords="220,516,264,624" target="wordcloud">
+<area shape="rect" alt="100" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=densely" coords="648,640,748,700" target="wordcloud">
+<area shape="rect" alt="112" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=tackled" coords="668,132,780,160" target="wordcloud">
+<area shape="rect" alt="104" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=similar" coords="532,64,636,92" target="wordcloud">
+<area shape="rect" alt="104" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=current" coords="348,276,452,300" target="wordcloud">
+<area shape="rect" alt="112" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=ipython" coords="768,376,880,412" target="wordcloud">
+<area shape="rect" alt="108" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=choices" coords="560,276,668,304" target="wordcloud">
+<area shape="rect" alt="136" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=warnings" coords="264,636,400,672" target="wordcloud">
+<area shape="rect" alt="112" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=transfer" coords="420,64,532,92" target="wordcloud">
+<area shape="rect" alt="112" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=activate" coords="672,160,784,188" target="wordcloud">
+<area shape="rect" alt="140" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=computer" coords="704,504,844,536" target="wordcloud">
+<area shape="rect" alt="112" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=settings" coords="152,364,264,400" target="wordcloud">
+<area shape="rect" alt="52" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=distance" coords="600,616,652,736" target="wordcloud">
+<area shape="rect" alt="116" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=practice" coords="148,400,264,452" target="wordcloud">
+<area shape="rect" alt="128" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=proposal" coords="188,216,316,252" target="wordcloud">
+<area shape="rect" alt="124" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=learning" coords="748,404,872,448" target="wordcloud">
+<area shape="rect" alt="148" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=connected" coords="244,608,392,636" target="wordcloud">
+<area shape="rect" alt="144" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=supported" coords="736,440,880,476" target="wordcloud">
+<area shape="rect" alt="132" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=instances" coords="512,444,644,472" target="wordcloud">
+<area shape="rect" alt="152" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=parameter" coords="340,120,492,152" target="wordcloud">
+<area shape="rect" alt="144" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=converted" coords="164,484,308,512" target="wordcloud">
+<area shape="rect" alt="156" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=batchnorm" coords="428,668,584,696" target="wordcloud">
+<area shape="rect" alt="160" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=correspond" coords="628,592,788,648" target="wordcloud">
+<area shape="rect" alt="132" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=classifier" coords="240,172,372,200" target="wordcloud">
+<area shape="rect" alt="156" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=tensorflow" coords="168,244,324,272" target="wordcloud">
+<area shape="rect" alt="152" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=validation" coords="672,236,824,264" target="wordcloud">
+<area shape="rect" alt="136" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=iterations" coords="260,580,396,608" target="wordcloud">
+<area shape="rect" alt="152" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=invariance" coords="188,272,340,300" target="wordcloud">
+<area shape="rect" alt="180" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=encountered" coords="688,476,868,504" target="wordcloud">
+<area shape="rect" alt="208" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=recommended" coords="124,300,332,328" target="wordcloud">
+<area shape="rect" alt="176" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=dimensional" coords="628,564,804,592" target="wordcloud">
+<area shape="rect" alt="168" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=instructions" coords="660,252,828,312" target="wordcloud">
+<area shape="rect" alt="180" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=translational" coords="156,328,336,380" target="wordcloud">
+<area shape="rect" alt="204" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=normalization" coords="268,144,472,172" target="wordcloud">
+<area shape="rect" alt="216" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=dimensionality" coords="664,348,880,384" target="wordcloud">
+<area shape="rect" alt="232" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=runtimewarning" coords="136,444,368,480" target="wordcloud">
+<area shape="rect" alt="428" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=cs231n/classifiers/linear_svm" coords="288,92,716,128" target="wordcloud">
+<area shape="rect" alt="184" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=nvidia" coords="492,120,676,172" target="wordcloud">
+<area shape="rect" alt="204" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=images" coords="572,172,776,240" target="wordcloud">
+<area shape="rect" alt="176" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=driver" coords="656,296,832,348" target="wordcloud">
+<area shape="rect" alt="224" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=running" coords="396,616,620,684" target="wordcloud">
+<area shape="rect" alt="208" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=project" coords="368,156,576,224" target="wordcloud">
+<area shape="rect" alt="240" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=gradient" coords="392,564,632,632" target="wordcloud">
+<area shape="rect" alt="480" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=hyperparameters" coords="260,512,740,580" target="wordcloud">
+<area shape="rect" alt="352" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=instance" coords="316,200,668,280" target="wordcloud">
+<area shape="rect" alt="404" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=notebook" coords="300,448,704,528" target="wordcloud">
+<area shape="rect" alt="336" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=training" coords="328,280,664,384" target="wordcloud">
+<area shape="rect" alt="508" href="http://mono.stanford.edu:8080/serveFaqs?req=getFaqs&keyword=accuracy" coords="260,376,768,480" target="wordcloud">
+</map>
+</body>
+</html>

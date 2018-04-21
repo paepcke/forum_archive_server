@@ -51,7 +51,7 @@ class ForumArchiveServer(RequestHandler):
     				    <head>
     				      <meta charset="utf-8">
     				      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    				      <title>From the Forum Archives</title>
+    				      
     				      <meta content='Forum Questions and Answers' name='description' />
     				      <meta content='width=device-width, initial-scale=1' name='viewport' />
     				      <link rel="stylesheet" href="/css/forumArchiveStyle.css" />
@@ -389,7 +389,8 @@ def main(argv=None):
         application = tornado.web.Application([(r"/serveFaqs", ForumArchiveServer),
                                                (r"/css/(.*)", tornado.web.StaticFileHandler, {"path": "./css"},),
                                                (r"/wordclouds/(.*)", tornado.web.StaticFileHandler, {"path": "./wordclouds"},),
-                                               (r"/(index\.html)", tornado.web.StaticFileHandler, {"path": "./"},),
+                                               (r"/(.*)", tornado.web.StaticFileHandler, 
+                                                        {"path": "./", "default_filename": "index.html"},),
                                                ])
     
         # To find the SSL certificate location, we assume
