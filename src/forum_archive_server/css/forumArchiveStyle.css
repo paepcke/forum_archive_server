@@ -5,6 +5,20 @@ body
     background: #808080;
 }
 
+.title {
+    text-align: center;
+    font-size: 150%;
+    color: white;
+}
+
+.feedback_email {
+    float: right;
+    color: white;
+    font-size: 110%;
+    text-align: center;
+    background: #009933;    
+}
+
 article
 {
     padding:5px;

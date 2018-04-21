@@ -193,7 +193,7 @@ class ForumArchiveServer(RequestHandler):
                 self.writeError("Request '%s' is not one of %s" % (request_dict, self.LEGAL_REQUESTS))
                 return   
             
-            # Caller wants list of course names?
+            # What does the student want?
             if requestName in ['getFaqs', 'demo']:
                 # For FAQ entry requests, args is a list of 
                 # keywords:
@@ -228,7 +228,7 @@ class ForumArchiveServer(RequestHandler):
         query = '''SELECT question, answer, question_id
     				 FROM ForumKeywords LEFT JOIN ForumPosts
     				 ON question_id = id
-    				 WHERE keyword = '%s'
+                                 WHERE LOCATE('%s', keyword) > 0
                      ''' % keywords[0]
         if len(keywords) > 1:
             for keyword in keywords[1:]:
@@ -243,7 +243,7 @@ class ForumArchiveServer(RequestHandler):
         rank = 0
         results = self.mysqlDb.query(query)
 
-        web_page = self.startResultWebPage()
+        web_page = self.startResultWebPage(keywords)
         for result in results:
             # Format the list of tuples, and send
             # back to browser. Each result will
@@ -252,16 +252,24 @@ class ForumArchiveServer(RequestHandler):
             web_page = self.addWebResult(web_page, result, keywords, rank, session_id)
         self.writeResult(web_page)
 
-    def startResultWebPage(self):
+    def startResultWebPage(self, keywords):
         '''
         Starts return Web page for a forum archive request.
         Doctype, head contents, and body open tag.
-        
+
+        @param keywords: keywords that led to this result: for result page title.
+        @type keywords: str
         @return: Web page fragment
         @rtype: str
         '''
         self.response_records = []
-        return ForumArchiveServer.RESULT_WEB_PAGE_HEADER + "<div>Foobar</div>\n"
+        header = ForumArchiveServer.RESULT_WEB_PAGE_HEADER +\
+               '<div class="title">Keyword(s): %s</div>\n' % ','.join(keywords) +\
+               '<div class="feedback_email">' +\
+                  '<a href="mailto:ankitab@stanford.edu?subject=Forum%20Archive%20Feedback&cc=paepcke@cs.stanford.edu">' +\
+                  'Feedback to Ankita' +\
+                  '</a></div>\n'
+        return header
         
     def addWebResult(self, web_page, resultTuple, keywords, rank, session_id):
         '''
