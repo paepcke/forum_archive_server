@@ -36,7 +36,7 @@ find wordclouds -name index.html | while read EXISTING_INDEX_FILE; do
     fi
 
     # Make the target attriute correction:
-    cat ${SAVED_FILE_NAME} | sed -n 's/target="wordcloud"/target="_self"/p' > ${EXISTING_INDEX_FILE}
+    cat ${SAVED_FILE_NAME} | sed 's/target="wordcloud"/target="_self"/p' > ${EXISTING_INDEX_FILE}
 done
 echo "Done."
 
