@@ -42,6 +42,7 @@ class ForumArchiveServer(RequestHandler):
         <!DOCTYPE html>
     				  <html>            
     				    <head>
+                        <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?lang=python&amp;skin=sunburst"></script>
     				      <meta charset="utf-8">
     				      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     				      <title>From the Forum Archives</title>
@@ -362,6 +363,8 @@ class ForumArchiveServer(RequestHandler):
         
         if not self.testing:
             (question, answer) = (resultTuple[0], resultTuple[1])
+            question = "<pre class=\"prettyprint\">" + question + "</pre>"
+            answer = "<pre class=\"prettyprint\">" + answer + "</pre>"
             web_page += RESULT_TEMPLATE.generate(question=question, 
                                                  answer=answer,
                                                  session_id=session_id,
