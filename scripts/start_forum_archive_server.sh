@@ -16,7 +16,7 @@ then
 fi
 LOG_FILE=$(echo ${LOG_DIR}/forum_archive_server_`date`.log | sed 's/[ ]/_/g')
 echo "FAQ entry requests: keywords,question_id,session_id,rank,uid" > $LOG_FILE
-echo "Feedback: feedack,session_id,rank,uid" > $LOG_FILE
+echo "Feedback: feedack,session_id,rank,uid" >> $LOG_FILE
 
 # Need to be in the proper Anaconda environment,
 # otherwise Python load paths won't be properly set:
@@ -29,7 +29,7 @@ cd ${EXEC_DIR}
 #********
 #echo "Log file: '${LOG_FILE}'"
 #********
-nohup ./forum_archive_server.py  > ${LOG_FILE} 2>&1 &
+nohup ./forum_archive_server.py  >> ${LOG_FILE} 2>&1 &
 
 
 
