@@ -15,6 +15,8 @@ then
     mkdir -p ${LOG_DIR}
 fi
 LOG_FILE=$(echo ${LOG_DIR}/forum_archive_server_`date`.log | sed 's/[ ]/_/g')
+echo "FAQ entry requests: keywords,question_id,session_id,rank,uid" > $LOG_FILE
+echo "Feedback: feedack,session_id,rank,uid" > $LOG_FILE
 
 # Need to be in the proper Anaconda environment,
 # otherwise Python load paths won't be properly set:

@@ -33,7 +33,7 @@ class ForumArchiveServer(RequestHandler):
     # =========================== Constants ==================
     LOG_LEVEL_NONE  = 0
     LOG_LEVEL_ERR   = 1
-    LOG_LEVEL_INFO  = 2
+    LOG_LEVEL_INFO  = 2    
     LOG_LEVEL_DEBUG = 3
 
     LEGAL_REQUESTS = ['getFaqs', 'demo']
@@ -247,10 +247,19 @@ class ForumArchiveServer(RequestHandler):
                 except KeyError as e:
                     self.writeError("Requested getFaqs without providing keyword request entry.")
                     return
+                # Get the user id:
+                try:
+                    uid = request_dict['uid']
+                except KeyError as e:
+                    self.writeError("Requested getFaqs without providing user id entry.")
+                    return
                 if len(keywords) == 0:
                     self.writeError("Requested getFaqs without providing keywords.")
                     return
-                self.handleFaqLookup(keywords, requestName == 'demo')
+                if len(uid) == 0:
+                    self.writeError("Requested getFaqs with empty uid.")
+                    return
+                self.handleFaqLookup(keywords, requestName == 'demo', uid[0])
                 return
             else:
                 self.logDebug("Unknown request: %s" % requestName)
@@ -269,7 +278,7 @@ class ForumArchiveServer(RequestHandler):
             except Exception as e:
                 self.writeError("Error during MySQL driver close: '%s'" % `e`)
 
-    def handleFaqLookup(self, keywords, isDemo):
+    def handleFaqLookup(self, keywords, isDemo, uid):
         query = '''SELECT question, answer, question_id
     				 FROM ForumKeywords LEFT JOIN ForumPosts
     				 ON question_id = id
@@ -284,6 +293,7 @@ class ForumArchiveServer(RequestHandler):
     				          unique_views DESC,
     				          total_no_upvotes DESC;
     			'''
+        # Create a unique session ID unless running in demo mode:
         session_id = 'demo' if isDemo else str(uuid.uuid4())    
         rank = 0
         results = self.mysqlDb.query(query)
@@ -294,7 +304,7 @@ class ForumArchiveServer(RequestHandler):
             # back to browser. Each result will
             # be a tuple: (<questionText>,<answerText>,<questionId>)
             rank += 1
-            web_page = self.addWebResult(web_page, result, keywords, rank, session_id)
+            web_page = self.addWebResult(web_page, result, keywords, rank, session_id, uid)
         self.writeResult(web_page)
 
     def startResultWebPage(self, keywords):
@@ -317,7 +327,7 @@ class ForumArchiveServer(RequestHandler):
             '</div>\n'
         return header
         
-    def addWebResult(self, web_page, resultTuple, keywords, rank, session_id):
+    def addWebResult(self, web_page, resultTuple, keywords, rank, session_id, uid):
         '''
         Result tuples are (<questionText>, answerText, questionID).
         Keywords is an array of keywords that are were requested from
@@ -339,21 +349,24 @@ class ForumArchiveServer(RequestHandler):
         @param session_id: unique id used in log to know the answers
                  that were given in response to a single request.
         @type session_id: string
+        @param uid: user ID created by browser or retrieved there from cookie.
+        @type uid: string
         @return: web page fragment with HTML for one question/answer result added
         @rtype: str 
         '''
 
         # Turn the keywords array and rank integer into strings
         # to make final log string construction easier
-        # in writeResult():
-        self.response_records.append([str(keywords), resultTuple[2], session_id, str(rank)])
+        # in writeResult(). resultTuple[2] is the question ID:
+        self.response_records.append([str(keywords), resultTuple[2], session_id, str(rank), uid])
         
         if not self.testing:
             (question, answer) = (resultTuple[0], resultTuple[1])
             web_page += RESULT_TEMPLATE.generate(question=question, 
                                                  answer=answer,
                                                  session_id=session_id,
-                                                 rank=rank
+                                                 rank=rank,
+                                                 uid=uid
                                                 )
             return web_page
         
