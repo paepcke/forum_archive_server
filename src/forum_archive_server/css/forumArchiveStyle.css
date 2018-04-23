@@ -47,7 +47,7 @@ aside
     float: right;
     min-width: 100px;
     width: 7%;
-    font-size:60%;
+    font-size:80%;
     color: white;
     background: #752020;    
     padding: 10px;
@@ -78,6 +78,7 @@ question-section
     /* background: #008080; */ /* Light green */
     background: #514c4c;
     border-radius: 20px;
+    font-size:130%;
 }
 
 answer-section
@@ -90,7 +91,8 @@ answer-section
     color: black;
     /* background: #90e4e4 */ /* Slightly darker green */
     background: #ebdbdb;
-    border-radius: 20px;    
+    border-radius: 20px;
+    font-size:130%;    
 }
 
 footer
