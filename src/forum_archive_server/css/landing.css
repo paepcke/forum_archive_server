@@ -35,6 +35,7 @@ body {
     margin: auto;
     max-width: 80%;
     display: block;
+    max-height:90%;
 }
 
 .cloudIcon:hover {
