@@ -1,7 +1,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
     $('.user-radio').change(function () {
-      $('.user-radio:checked').parent().append('<a>Thanks! Your response has been recored! If you change your mind, just re-select another option!</a>');
+      $('.user-radio:checked').parent().append('<a>Thanks! Your response has been recored! If you change your mind, just re-select another option!</a>').fadeOut(100);
+      ;
     });
     </script>
     <question-section>
