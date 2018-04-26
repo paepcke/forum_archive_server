@@ -1,10 +1,3 @@
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script>
-    $('.user-radio').change(function () {
-      $('.user-radio:checked').parent().append('<a>Thanks! Your response has been recored! If you change your mind, just re-select another option!</a>').children(':first').fadeOut(100);
-      ;
-    });
-    </script>
     <question-section>
       <h1>Question</h1>
       <p class="question-answer-text">{% raw question %}</p>
@@ -16,10 +9,10 @@
     <aside>
       <form id="feedback" class="line-item-feedback" action="http://taffy:8080/serveFaqs">
         <fieldset>
-          <legend>Is this Q&amp;A pair useful?...</legend>
-          <input type="radio" class ="user-radio" name="feedback" value="Not,{% raw session_id %},{% raw rank %},{% raw uid %}" style="align:left"> Not at all<br>
-          <input type="radio" class ="user-radio" name="feedback" value="Partial,{% raw session_id %},{% raw rank %},{% raw uid %}" style="align:left"> Partially<br>
-          <input type="radio" class ="user-radio" name="feedback" value="Completely,{% raw session_id %},{% raw rank %},{% raw uid %}" style="align:left"> Completely<br>
+          <legend>Is this Q&amp;A pair useful?...(Record your response with just a click) </legend>
+          <input type="radio" name="feedback" value="Not,{% raw session_id %},{% raw rank %},{% raw uid %}" style="align:left"> Not at all<br>
+          <input type="radio" name="feedback" value="Partial,{% raw session_id %},{% raw rank %},{% raw uid %}" style="align:left"> Partially<br>
+          <input type="radio" name="feedback" value="Completely,{% raw session_id %},{% raw rank %},{% raw uid %}" style="align:left"> Completely<br>
         </fieldset>
       </form>
     </aside>
