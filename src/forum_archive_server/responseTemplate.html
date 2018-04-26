@@ -1,9 +1,12 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
-      $(document).ready(function(){
-      $("#feedback").click(function(){
-          $("form").append(" <b>Thanks! Your response has been recorded. If you change your mind, feel free to re-select another option!</b>.");
-      });
+    //   $(document).ready(function(){
+    //   $("#feedback").click(function(){
+    //       $("form").append(" <b>Thanks! Your response has been recorded. If you change your mind, feel free to re-select another option!</b>.");
+    //   });
+    // });
+    $("input[@name='feedback']").change(function(){
+      $("form").append(" <b>Thanks! Your response has been recorded. If you change your mind, feel free to re-select another option!</b>.");
     });
     </script>
     <question-section>
