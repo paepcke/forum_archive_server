@@ -323,7 +323,7 @@ class ForumArchiveServer(RequestHandler):
             '<div class="title">Keyword(s): %s' % ','.join(keywords) +\
             '  <div class="feedback_email">' +\
             '    <a href="mailto:ankitab@stanford.edu?subject=Forum%20Archive%20Feedback&cc=paepcke@cs.stanford.edu">' +\
-            '       Feedback to Ankita' +\
+            '       Send Feedback' +\
             '    </a></div>\n' +\
             '</div>\n'
         return header
